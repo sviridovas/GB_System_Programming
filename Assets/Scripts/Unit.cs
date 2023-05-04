@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading;
 using System.Threading.Tasks;
 
 public class Unit : MonoBehaviour
@@ -33,24 +34,39 @@ public class Unit : MonoBehaviour
         }
     }
 
-    async Task Task1()
+    async Task Task1(CancellationToken token)
     {
-        await Task.Delay(1000);
+        await Task.Delay(10, token);
         Debug.Log("Task1 end");
     }
 
-    async Task Task2()
+    async Task Task2(CancellationToken token)
     {
         for(int i = 60; i != 0; --i) {
+            if(token.IsCancellationRequested) return;
             await Task.Yield();    
         }
         Debug.Log("Task2 end");
     }
 
+    async Task<bool> WhatTaskFasterAsync (CancellationToken token, Task task1, Task task2) {
+        var i = await Task.WhenAny(task1, task2);
+        // как остановить задачи отсюда, если нельзя влиять на token
+        if(i == task1) {
+            return true;
+        } 
+        else {
+            return false;
+        }
+    }
+
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
-        RecieveHealing();
+        // RecieveHealing();
+
+        var token = new CancellationTokenSource().Token;
+        await WhatTaskFasterAsync(token, Task1(token), Task2(token));
     }
 
     // Update is called once per frame
