@@ -16,10 +16,4 @@ public class Player : MonoBehaviour
         yield return null;        
         Debug.Log("After yield");
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
