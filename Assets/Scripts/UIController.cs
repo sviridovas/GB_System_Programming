@@ -24,6 +24,8 @@ public class UIController : MonoBehaviour
     private Server server;
     [SerializeField]
     private Client client;
+    [SerializeField]
+    private TMP_InputField nameInputField;
     private void Start()
     {
         buttonStartServer.onClick.AddListener(() => StartServer());
@@ -44,7 +46,7 @@ public class UIController : MonoBehaviour
     }
     private void Connect()
     {
-        client.Connect();
+        client.Connect(nameInputField.text);
     }
     private void Disconnect()
     {

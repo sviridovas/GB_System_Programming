@@ -17,8 +17,11 @@ public class Client : MonoBehaviour
     private int connectionID;
     private bool isConnected = false;
     private byte error;
-    public void Connect()
+    private string name;
+    public void Connect(string name)
     {
+        this.name = name;
+
         NetworkTransport.Init();
         ConnectionConfig cc = new ConnectionConfig();
         reliableChannel = cc.AddChannel(QosType.Reliable);
@@ -56,6 +59,7 @@ public class Client : MonoBehaviour
                 case NetworkEventType.ConnectEvent:
                     onMessageReceive?.Invoke($"You have been connected to server.");
                     Debug.Log($"You have been connected to server.");
+                    SendMessage(name);
                     break;
                 case NetworkEventType.DataEvent:
                     string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
