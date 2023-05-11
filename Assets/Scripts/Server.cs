@@ -60,18 +60,28 @@ public class Server : MonoBehaviour
                     Debug.Log($"Player {connectionId} has connected.");
                     break;
                 case NetworkEventType.DataEvent: {
-                    string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
-
-                    var conn = connections.Find(connection => connection.id == connectionId);
-                    if(string.IsNullOrEmpty(conn.name)) {
-                        conn.name = message;
-                        SendMessageToAll($"Player {conn.name}: присоединился");
-                        Debug.Log($"Player {conn.name}: присоединился");
+                    // string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
+                    var message = CustomMessage.ByteArraToObject(recBuffer, 0, dataSize);
+                    if(message == null) {
+                        Debug.Log($"Не опознаное сообщение");
                         break;
                     }
 
-                    SendMessageToAll($"Player {conn.name}: {message}");
-                    Debug.Log($"Player {conn.name}: {message}");
+                    var conn = connections.Find(connection => connection.id == connectionId);
+
+                    switch(message.type){
+                        case "Name":
+                            conn.name = message.message;
+
+                            SendMessageToAll($"Player {connectionId}: сменил имя на {conn.name}");
+                            Debug.Log($"Player {connectionId}: сменил имя на {conn.name}");
+                        break;
+                        case "Message":
+                            SendMessageToAll($"Player {conn.name}: {message.message}");
+                            Debug.Log($"Player {conn.name}: {message.message}");
+                        break;
+                    }
+
                     break;
                 }
                 case NetworkEventType.DisconnectEvent:

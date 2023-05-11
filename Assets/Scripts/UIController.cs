@@ -54,7 +54,8 @@ public class UIController : MonoBehaviour
     }
     private void SendMessage()
     {
-        client.SendMessage(inputField.text);
+        // client.SendMessage(inputField.text);
+        client.SendMessage(new CustomMessage(){type = "Message", message = inputField.text});
         inputField.text = "";
     }
     public void ReceiveMessage(object message)

@@ -59,7 +59,7 @@ public class Client : MonoBehaviour
                 case NetworkEventType.ConnectEvent:
                     onMessageReceive?.Invoke($"You have been connected to server.");
                     Debug.Log($"You have been connected to server.");
-                    SendMessage(name);
+                    SendMessage(new CustomMessage(){type = "Name", message = name});
                     break;
                 case NetworkEventType.DataEvent:
                     string message = Encoding.Unicode.GetString(recBuffer, 0, dataSize);
@@ -78,11 +78,12 @@ public class Client : MonoBehaviour
             bufferSize, out dataSize, out error);
         }
     }
-    public void SendMessage(string message)
+    public void SendMessage(CustomMessage message)
     {
-        byte[] buffer = Encoding.Unicode.GetBytes(message);
-        NetworkTransport.Send(hostID, connectionID, reliableChannel, buffer, message.Length *
-        sizeof(char), out error);
+        // byte[] buffer = Encoding.Unicode.GetBytes(message);
+        byte[] buffer = CustomMessage.ObjectToByteArray(message);
+
+        NetworkTransport.Send(hostID, connectionID, reliableChannel, buffer, buffer.Length, out error);
         if ((NetworkError)error != NetworkError.Ok) Debug.Log((NetworkError)error);
     }
 }
