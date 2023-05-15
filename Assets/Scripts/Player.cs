@@ -1,18 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : NetworkBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField]
+    private GameObject playerPrefab;
+    private GameObject playerCharacter;
+    private void Start()
     {
-        
+        SpawnCharacter();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SpawnCharacter()
     {
-        
+        // if (!isServer)
+        // {
+        //     return;
+        // }
+        playerCharacter = Instantiate(playerPrefab);
+        // NetworkServer.SpawnWithClientAuthority(playerCharacter, connectionToClient);
     }
 }
