@@ -6,12 +6,14 @@ using UnityEngine;
 [RequireComponent(typeof(CharacterController))]
 public abstract class Character : NetworkBehaviour
 {
-    protected Action OnUpdateAction { get; set; }
+    // protected Action OnUpdateAction { get; set; }
     protected abstract FireAction fireAction { get; set; }
-    [SyncVar] protected Vector3 serverPosition;
+    // [SyncVar] protected Vector3 serverPosition;
+    // [SyncVar] protected Quaternion serverRotation;
+    
     protected virtual void Initiate()
     {
-        OnUpdateAction += Movement;
+        // OnUpdateAction += Movement;
     }
     private void Update()
     {
@@ -19,12 +21,13 @@ public abstract class Character : NetworkBehaviour
     }
     private void OnUpdate()
     {
-        OnUpdateAction?.Invoke();
+        // OnUpdateAction?.Invoke();
     }
-    [Command]
-    protected void CmdUpdatePosition(Vector3 position)
+    // [Command]
+    protected void CmdUpdatePosition(Vector3 position, Quaternion rotation)
     {
-        serverPosition = position;
+        // serverPosition = position;
+        // serverRotation = rotation;
     }
 
     public abstract void Movement();
