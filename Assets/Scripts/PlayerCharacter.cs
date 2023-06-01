@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerCharacter : Character
 {
+    bool hasAuthority = false;
+
     [Range(0, 100)][SerializeField] private int health = 100;
     [Range(0.5f, 10.0f)][SerializeField] private float movingSpeed = 8.0f;
     [SerializeField] private float acceleration = 3.0f;
@@ -48,8 +50,7 @@ public class PlayerCharacter : Character
         }
         else
         {
-            transform.position = Vector3.SmoothDamp(transform.position,
-            serverPosition, ref currentVelocity, movingSpeed * Time.deltaTime);
+            // transform.position = Vector3.SmoothDamp(transform.position, serverPosition, ref currentVelocity, movingSpeed * Time.deltaTime);
         }
     }
     private void Start()
